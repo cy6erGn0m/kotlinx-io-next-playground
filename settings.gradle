@@ -1,0 +1,25 @@
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "kotlin-multiplatform") {
+                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
+            }
+        }
+    }
+
+    repositories {
+//        maven {
+//            url 'https://teamcity.jetbrains.com/guestAuth/app/rest/builds/buildType:(id:Kotlin_dev_Compiler),number:1.3.30-dev-124,branch:default:any/artifacts/content/maven/'
+//        }
+
+        mavenCentral()
+
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url 'https://kotlin.bintray.com/kotlin-eap' }
+        maven { url 'https://kotlin.bintray.com/kotlin-dev' }
+    }
+}
+rootProject.name = 'kotlinx-io-next-poc'
+
+
+enableFeaturePreview('GRADLE_METADATA')
