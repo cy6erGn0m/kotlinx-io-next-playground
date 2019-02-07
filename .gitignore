@@ -1,0 +1,14 @@
+hs_err_pid*
+
+.gradle
+/build/
+
+# Cache of project
+.gradletasknamecache
+
+.idea
+!.idea/**/dictionaries
+*.iws
+*.ipr
+out/
+
