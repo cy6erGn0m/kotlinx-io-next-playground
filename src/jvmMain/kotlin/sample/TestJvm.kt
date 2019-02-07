@@ -2,7 +2,7 @@ package sample
 
 
 
-fun Input.test2(): Char {
+fun Input.test3(): Char {
     return readIf2 { it < 0x80 }.toChar()
 }
 

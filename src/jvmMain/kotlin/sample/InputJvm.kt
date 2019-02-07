@@ -6,14 +6,14 @@ import java.nio.*
  * Represents an buffered input from a initial, file or a virtual source
  */
 actual abstract class Input actual constructor(initial: IoBuffer) {
-    actual constructor(initial: Memory, size: Int) : this(IoBuffer(initial, size))
+    actual constructor(initial: Memory, size: Int) : this(IoBuffer(initial, 0, size))
 
     @DangerousIoApi
     actual var head: IoBuffer? = initial
         protected set
 
     actual var headChunkMemory: Memory? = head?.memory
-        internal set
+        protected set
 
     @DangerousIoApi
     inline val headByteBuffer: ByteBuffer?
@@ -83,7 +83,7 @@ actual abstract class Input actual constructor(initial: IoBuffer) {
         return true
     }
 
-    protected actual abstract fun fill(dst: IoBuffer): Boolean
+    protected actual abstract fun fill(destination: IoBuffer): Boolean
 }
 
 @DangerousIoApi

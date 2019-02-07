@@ -17,6 +17,7 @@ expect class Memory {
 
     /**
      * Returns memory's subrange. On some platforms it could do range checks but it is not guaranteed to be safe.
+     * It also could lead to memory allocations on some platforms.
      */
     fun slice(offset: Int, length: Int): Memory
 
@@ -30,7 +31,7 @@ expect class Memory {
 
 /**
  * Access to the backing array or `null` if not accessible or not array-backed memory
- * TODO questionable
+ * TODO questionable, may only work on JVM and JS
  */
 expect val Memory.array: ByteArray?
 

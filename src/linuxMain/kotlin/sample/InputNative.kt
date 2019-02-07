@@ -6,13 +6,12 @@ import kotlinx.cinterop.*
  * Represents an buffered input from a initial, file or a virtual source
  */
 actual abstract class Input actual constructor(initial: IoBuffer) {
-    actual constructor(initial: Memory, size: Int) : this(IoBuffer(initial, size))
+    actual constructor(initial: Memory, size: Int) : this(IoBuffer(initial, 0, size))
 
     /**
      * Head chunk or `null` if empty
      */
-    @PublishedApi
-    internal actual val head: IoBuffer? = initial
+    actual var head: IoBuffer? = initial
 
     /**
      * Unsafe head memory chunk. Prefer using read functions instead.
@@ -25,11 +24,15 @@ actual abstract class Input actual constructor(initial: IoBuffer) {
     /**
      * A byte order that is used to decode multibyte primitives
      */
-    actual var byteOrder: ByteOrder = nativeByteOrder
-        set(newOrder) {
+    actual var byteOrder: ByteOrder = ByteOrder.nativeOrder
+        protected set(newOrder) {
             field = newOrder
-            head?.byteOrder = newOrder
+            nativeByteOrder = newOrder == ByteOrder.nativeOrder
         }
+
+    var nativeByteOrder: Boolean = byteOrder == ByteOrder.nativeOrder
+        protected set
+
 
     /**
      * Reads and returns a byte or fails if no more bytes available
@@ -99,9 +102,16 @@ actual abstract class Input actual constructor(initial: IoBuffer) {
         return peekByte()
     }
 
+    actual fun tryFill(required: Int): Boolean {
+        TODO()
+    }
+
     /**
-     * Initiate reading data from the underlying source
-     * @return `true` if [required] bytes available
+     * Provide/compute the next data chunk. The provided [destination] should be only used inside of [fill]
+     * and shouldn't be captured outside.
+     *
+     * @param destination buffer to write data to
+     * @return `true` if this function could be invoked later, `false` if the end of source encountered.
      */
-    actual abstract fun tryFill(required: Int): Boolean
+    protected actual abstract fun fill(destination: IoBuffer): Boolean
 }
